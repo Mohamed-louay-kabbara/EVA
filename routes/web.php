@@ -10,15 +10,22 @@ use App\Http\Controllers\OpinionController;
 use App\Http\Controllers\LangController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::group(['middleware' => ['guest']], function () {
+
+    Route::get('/', function () {
+        return view('auth.login');
+    });
+});
     Route::group(
         [
             'prefix' => LaravelLocalization::setLocale(),
             'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath','auth' ]
         ], function(){
 	 /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
-     Route::get('/',function(){
-        return view('auth.login');
-     });
+    //  Route::get('/',function(){
+    //     return view('auth.login');
+    //  });
      Route::get('/register',function(){
         return view('auth.register');
      });
@@ -36,9 +43,9 @@ use Illuminate\Support\Facades\Route;
         Route::get('/show_opinions', [OpinionController::class, 'index1'])->name('opinions.index1');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });                          
+    });
     });
 
 require __DIR__.'/auth.php';
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
